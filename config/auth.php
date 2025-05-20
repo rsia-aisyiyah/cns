@@ -61,8 +61,10 @@ return [
 
     'providers' => [
         'users' => [
-            'driver' => 'eloquent',
+            'driver' => 'aes.user.provider',
+            // 'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
+            'column' => ['id_user', 'password'],
         ],
 
         // 'users' => [

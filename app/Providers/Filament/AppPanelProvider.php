@@ -27,6 +27,7 @@ class AppPanelProvider extends PanelProvider
             ->default()
             ->id('app')
             ->path('app')
+            ->login(\App\Filament\Auth\Login::class)
             ->colors([
                 'primary' => Color::Emerald,
             ])
