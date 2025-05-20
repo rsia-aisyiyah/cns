@@ -74,7 +74,7 @@ CNS (Central Notification Service) dibangun menggunakan berbagai teknologi untuk
 
 ## Panduan Kontribusi ⚒️
 
-Kami menyambut kontribusi dari semua pengembang internal dan mitra kerja sama. Untuk memulai, bacalah [CONTRIBUTING.md](CONTRIBUTING.md).
+Kami menyambut kontribusi dari semua pengembang internal dan mitra kerja sama. Untuk memulai, bacalah [CONTRIBUTING](CONTRIBUTING.md).
 
 ## Lisensi 🔐
 
