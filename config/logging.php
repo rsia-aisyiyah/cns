@@ -127,6 +127,19 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+
+
+        'whatsapp' => [
+            'driver' => 'monolog',
+            'handler' => Monolog\Handler\RotatingFileHandler::class,
+            'with' => [
+                'filename' => storage_path('logs/whatsapp/whatsapp.log'),
+                'maxFiles' => env('LOG_MAX_FILES', 0),
+                'level' => env('LOG_LEVEL', 'info'),
+                'dateFormat' => Monolog\Handler\RotatingFileHandler::FILE_PER_MONTH,
+            ],
+        ],
     ],
 
 ];
