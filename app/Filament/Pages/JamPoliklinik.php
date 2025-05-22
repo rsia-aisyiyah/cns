@@ -152,6 +152,7 @@ class JamPoliklinik extends Page implements HasForms, HasTable
             ->columns([
                 TextColumn::make('no_rawat')
                     ->label('No. Rawat')
+                    ->description(fn($record) => $record->pasien->no_rkm_medis)
                     ->searchable(),
 
                 TextColumn::make('tgl_registrasi')
@@ -167,7 +168,7 @@ class JamPoliklinik extends Page implements HasForms, HasTable
 
                 TextColumn::make('pasien.nm_pasien')
                     ->label('Nama Pasien')
-                    ->description(fn($record) => $record->pasien->no_rkm_medis)
+                    ->description(fn($record) => preg_match('/^\+?\d{10,15}$/', $record->pasien->no_tlp) ? $record->pasien->no_tlp : new \Illuminate\Support\HtmlString('<span class="text-amber-500 font-semibold">' . $record->pasien->no_tlp . '</span>'))
                     ->searchable(),
             ])
             ->bulkActions([
@@ -179,6 +180,11 @@ class JamPoliklinik extends Page implements HasForms, HasTable
 
                         $this->handleNotify($selectedRecords);
                     })
+                    ->requiresConfirmation()
+                    ->modalHeading('Eit, Tunggu Dulu!')
+                    ->modalDescription('FYI : Pasien tidak akan menerima notifikasi jika penulisan nomor telepon tidak valid, atau ada karakter yang tidak sesuai.')
+                    ->modalSubmitActionLabel('Oke lah!')
+                    ->modalIconColor('danger')
                     ->color('success')
                     ->icon('heroicon-o-bell'),
             ]);
