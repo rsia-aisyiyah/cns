@@ -146,13 +146,17 @@ class DokterOff extends Page implements HasForms, HasTable
 
     public function handleNotify(Collection $records): void
     {
+        $latTime = now()->addSeconds(rand(25, 35));
         foreach ($records as $record) {
             // Panggil fungsi untuk generate pesan
             $message = $this->generateNotificationMessage($record);
             
+            // Kirim pesan ke WhatsApp menggunakan job
             \App\Jobs\SendWhatsApp::dispatch($message, $record->pasien->no_tlp)
-                ->delay(now()->addSeconds(rand(25, 35)))
+                ->delay($latTime)
                 ->onQueue('whatsapp');
+
+            $latTime = $latTime->addSeconds(rand(25, 35));
         }
 
         \Filament\Notifications\Notification::make()

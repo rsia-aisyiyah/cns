@@ -211,13 +211,18 @@ class JamPoliklinik extends Page implements HasForms, HasTable
         $jamMulai = $queueFormState['jam_mulai'];
         $jamSelesai = $queueFormState['disableJamSelesai'] ?? false ? 'Selesai' : $queueFormState['jam_selesai'];
 
+        $latTime = now()->addSeconds(rand(25, 35));
         foreach ($records as $record) {
             // Panggil fungsi untuk generate pesan
             $message = $this->generateNotificationMessage($record, $jamMulai, $jamSelesai);
 
+            // Kirim pesan ke WhatsApp
             \App\Jobs\SendWhatsApp::dispatch($message, $record->pasien->no_tlp)
-                ->delay(now()->addSeconds(rand(25, 35)))
+                ->delay($latTime)
                 ->onQueue('whatsapp');
+
+            // Kirim pesan ke Telegram
+            $latTime = $latTime->addSeconds(rand(10, 25));
         }
 
         \Filament\Notifications\Notification::make()
