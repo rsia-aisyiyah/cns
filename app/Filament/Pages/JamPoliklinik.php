@@ -275,13 +275,13 @@ class JamPoliklinik extends Page implements HasForms, HasTable
             $start = \Illuminate\Support\Carbon::createFromFormat('H:i:s', $jadwalStart)->format('H:i');
             $end = \Illuminate\Support\Carbon::createFromFormat('H:i:s', $jadwalEnd)->format('H:i');
 
-            $jadwalText = " yang semula jam praktik <span class='px-2 text-nowrap bg-amber-200 rounded'><strong class='font-semibold'>{$start} s/d {$end}</strong></span>";
+            $jadwalText = " yang semula jam praktik <span class='px-2 text-nowrap bg-amber-200 dark:bg-amber-600 rounded'><strong class='font-semibold'>{$start} s/d {$end}</strong></span>";
         }
 
         $html = '';
         $html .= 'Yth. Pemilik Nomor Registrasi:<br />';
         $html .= '<strong>' . $noRawat . '</strong><br /><br />';
-        $html .= 'Kami informasikan adanya perubahan jam praktik untuk dokter <strong>' . $dokter . '</strong> pada <strong>' . $tglRegistrasi . '</strong>' . $jadwalText . ' menjadi jam <span class="px-2 text-nowrap bg-emerald-200 rounded"><strong class="font-semibold">' . $jamMulai . ' s/d ' . $jamSelesai . '</strong></span>.<br /><br />';
+        $html .= 'Kami informasikan adanya perubahan jam praktik untuk dokter <strong>' . $dokter . '</strong> pada <strong>' . $tglRegistrasi . '</strong>' . $jadwalText . ' menjadi jam <span class="px-2 text-nowrap bg-emerald-200 dark:bg-emerald-600 rounded"><strong class="font-semibold">' . $jamMulai . ' s/d ' . $jamSelesai . '</strong></span>.<br /><br />';
         $html .= 'Mohon maaf atas ketidaknyamanan 🙏🏻🙏🏻.<br />';
         $html .= 'Terima kasih atas perhatian dan kerjasamanya.';
 
