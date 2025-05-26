@@ -7,6 +7,13 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
+     * The name of the database connection to use.
+     *
+     * @var string|null
+     */
+    protected $connection = 'mysql_2';
+
+    /**
      * Run the migrations.
      */
     public function up(): void
