@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Spesialis extends Model
 {
+    protected $connection = 'mysql_2';
+
     protected $table = 'spesialis';
 
     protected $primaryKey = 'kd_sps';

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class JadwalPoliklinik extends Model
 {
+    protected $connection = 'mysql_2';
+
     protected $table = 'jadwal';
 
     protected $primaryKey = ['kd_dokter', 'hari_kerja', 'jam_mulai'];
