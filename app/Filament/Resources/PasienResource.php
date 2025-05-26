@@ -17,7 +17,7 @@ class PasienResource extends Resource
 {
     protected static ?string $model = Pasien::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     protected static ?string $navigationGroup = 'Data Master';
 
@@ -36,6 +36,7 @@ class PasienResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->recordUrl(null)
             ->columns([
                 Tables\Columns\TextColumn::make('no_rkm_medis')
                     ->label('No. RM')
@@ -69,7 +70,6 @@ class PasienResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
