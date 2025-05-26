@@ -25,12 +25,20 @@ class SendWhatsApp implements ShouldQueue
     protected $receiver;
 
     /**
+     * The name of the queue the job should be sent to.
+     *
+     * @var string
+     */
+    protected $sessionName;
+
+    /**
      * Create a new job instance.
      */
-    public function __construct(string $message, string $receiver)
+    public function __construct(string $message, string $receiver, string $sessionName)
     {
         $this->message = $message;
         $this->receiver = $receiver;
+        $this->sessionName = $sessionName;
     }
 
     /**
@@ -39,7 +47,6 @@ class SendWhatsApp implements ShouldQueue
     public function handle(): void
     {
         $whatsappBaseApiUrl = env('API_WHATSAPP_URL');
-        $whatsappSessionName = env('API_WHATSAPP_SESSION_NAME');
 
         // Refine phone number dulu
         $refinedPhoneNumber = $this->refinePhoneNumber($this->receiver);
@@ -57,7 +64,7 @@ class SendWhatsApp implements ShouldQueue
         $response = \Illuminate\Support\Facades\Http::post("$whatsappBaseApiUrl/api/sendText", [
             "chatId"                 => $receiverPhoneNumber,
             "text"                   => $this->htmlToWhatsAppText($this->message),
-            "session"                => $whatsappSessionName,
+            "session"                => $this->sessionName,
             "linkPreview"            => true,
             "linkPreviewHighQuality" => true,
             "reply_to"               => null,

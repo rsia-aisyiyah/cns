@@ -53,6 +53,11 @@ class JamPoliklinik extends Page implements HasForms, HasTable
         $this->tgl_registrasi = now()->format('Y-m-d');
     }
 
+    public function getWahaSesstionName(): string
+    {
+        return config('waha.default.session');
+    }
+
     public function getForms(): array
     {
         return [
@@ -223,7 +228,7 @@ class JamPoliklinik extends Page implements HasForms, HasTable
             $message = $this->generateNotificationMessage($record, $jamMulai, $jamSelesai);
 
             // Kirim pesan ke WhatsApp
-            \App\Jobs\SendWhatsApp::dispatch($message, $record->pasien->no_tlp)
+            \App\Jobs\SendWhatsApp::dispatch($message, $record->pasien->no_tlp, $this->getWahaSesstionName())
                 ->delay($latTime)
                 ->onQueue('whatsapp');
 

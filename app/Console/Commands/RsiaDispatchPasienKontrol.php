@@ -73,7 +73,7 @@ class RsiaDispatchPasienKontrol extends Command
             $msg .="Pastikan untuk hadir tepat waktu dan membawa dokumen yang diperlukan. Jika ada perubahan atau Anda tidak dapat hadir, mohon beri tahu kami secepatnya." . "<br /><br />";
             $msg .="Terima kasih, semoga sehat selalu! 😊";
 
-            SendWhatsApp::dispatch($msg, $receiver)
+            SendWhatsApp::dispatch($msg, $receiver, config('waha.sessions.pendaftaran'))
                 ->delay($baseDelay)
                 ->onQueue('whatsapp');
 

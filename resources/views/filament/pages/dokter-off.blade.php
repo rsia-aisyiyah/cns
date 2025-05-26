@@ -11,6 +11,14 @@
         </div>
 
         <div class="lg:col-span-1 space-y-6">
+            {{-- Session Name --}}
+            <x-filament::section class="text-pretty">
+                <p>WhatsApp Session yang digunakan : </p>
+                <div class="font-semibold text-emerald-500">
+                    {{ $this->getWahaSesstionName() }} ( {{ config('waha.sessions')[$this->getWahaSesstionName()]['id'] }} )
+                </div>
+            </x-filament::section>
+
             {{-- Queue Form --}}
             {{ $this->queueForm }}
 
