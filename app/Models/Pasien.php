@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pasien extends Model
 {
+    protected $connection = 'mysql_2';
+
     protected $table = 'pasien';
 
     protected $primaryKey = 'no_rkm_medis';
