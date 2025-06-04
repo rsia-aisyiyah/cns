@@ -4,13 +4,13 @@
     {{-- Filter Form --}}
     {{ $this->filterForm }}
 
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-6 gap-6">
         {{-- Table --}}
-        <div class="lg:col-span-3">
+        <div class="lg:col-span-4">
             {{ $this->table }}
         </div>
 
-        <div class="lg:col-span-1 space-y-6">
+        <div class="lg:col-span-2 space-y-6">
             {{-- Session Name --}}
             <x-filament::section class="text-pretty">
                 <p>WhatsApp Session yang digunakan : </p>

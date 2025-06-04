@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class RegPeriksa extends Model
 {
+    use \Awobaz\Compoships\Compoships;
+
     protected $connection = 'mysql';
 
     /**
@@ -67,5 +69,12 @@ class RegPeriksa extends Model
     public function poli()
     {
         return $this->belongsTo(Poliklinik::class, 'kd_poli', 'kd_poli');
+    }
+
+    public function jadwal_dokter()
+    {
+        $hari = \Carbon\Carbon::parse($this->tgl_registrasi)->locale('id')->isoFormat('dddd');
+        return $this->belongsTo(JadwalPoliklinik::class, ['kd_dokter', 'kd_poli'], ['kd_dokter', 'kd_poli'])
+            ->where('hari_kerja', $hari);
     }
 }

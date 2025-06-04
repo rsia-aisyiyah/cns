@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class JadwalPoliklinik extends Model
 {
+    use \Awobaz\Compoships\Compoships;
+
+    
     protected $connection = 'mysql';
 
     protected $table = 'jadwal';

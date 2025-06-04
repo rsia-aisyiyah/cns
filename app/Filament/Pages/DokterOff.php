@@ -6,6 +6,7 @@ use Filament\Forms\Form;
 use Filament\Pages\Page;
 use App\Models\RegPeriksa;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
@@ -31,18 +32,25 @@ class DokterOff extends Page implements HasForms, HasTable
     // PROPERTIES untuk filter form
     public ?string $tgl_registrasi = null;
     public ?string $kd_poli = null;
+    public ?string $kd_dokter = null;
 
     // PROPERTIES untuk queue form
-    public ?string $tgl_praktik = null;
+    public ?string $q_tgl_praktik = null;
+    public ?string $q_kd_poli = null;
+
+    public ?Collection $q_kd_poli_options = null;
 
     public function mount(): void
     {
         $this->tgl_registrasi = now()->format('Y-m-d');
+        $this->q_tgl_praktik = $this->tgl_registrasi;
+
+        $this->setPoliOptions();
     }
 
     public function getWahaSesstionName(): string
     {
-        return config('waha.default.session');
+        return config('waha.sessions.byu-ferry.name');
     }
 
     public function getForms(): array
@@ -57,8 +65,8 @@ class DokterOff extends Page implements HasForms, HasTable
     {
         return $form
             ->schema([
-                Section::make()
-                    ->columns(2)
+                Section::make('Filter Data Pasien')
+                    ->columns(3)
                     ->schema([
                         DatePicker::make('tgl_registrasi')
                             ->label('Tgl Registrasi')
@@ -68,12 +76,24 @@ class DokterOff extends Page implements HasForms, HasTable
                             ->default(\Illuminate\Support\Carbon::now())
                             ->afterStateUpdated(fn() => $this->resetTable()),
 
+                        Select::make('kd_dokter')
+                            ->label('Dokter')
+                            ->options(\App\Models\Dokter::whereHas("jadwal")->pluck('nm_dokter', 'kd_dokter'))
+                            ->searchable()
+                            ->reactive()
+                            ->afterStateUpdated(function () {
+                                $this->resetTable();
+                                $this->setPoliOptions();
+                            }),
+
                         Select::make('kd_poli')
                             ->label('Poliklinik')
                             ->options(\App\Models\Poliklinik::whereHas("jadwal_dokter")->pluck('nm_poli', 'kd_poli'))
                             ->searchable()
                             ->reactive()
-                            ->afterStateUpdated(fn() => $this->resetTable()),
+                            ->afterStateUpdated(function () {
+                                $this->resetTable();
+                            }),
                     ]),
             ]);
     }
@@ -82,14 +102,28 @@ class DokterOff extends Page implements HasForms, HasTable
     {
         return $form
             ->schema([
-                Section::make("Jadwal Praktik")
+                Section::make("Jadwal Praktik Dokter")
                     ->columns(1)
+                    ->reactive()
                     ->schema([
-                        DatePicker::make('tgl_praktik')
-                            ->label('Tgl Praktik')
+                        DatePicker::make('q_tgl_praktik')
+                            ->label('Tanggal')
                             ->placeholder('Pilih Tanggal Praktik')
                             ->native(false)
-                            ->reactive(),
+                            ->reactive()
+                            ->afterStateUpdated(function ($state) {
+                                $this->setPoliOptions();
+                            }),
+
+                        // select poliklinik
+                        Select::make('q_kd_poli')
+                            ->label('Poliklinik')
+                            ->options(fn() => $this->q_kd_poli_options ?? collect())
+                            ->hidden(fn() => $this->q_kd_poli_options?->isEmpty())
+                            ->searchable()
+                            ->reactive()
+                            ->live()
+                            ->afterStateUpdated(fn() => $this->resetTable()),
                     ]),
             ]);
     }
@@ -110,7 +144,11 @@ class DokterOff extends Page implements HasForms, HasTable
                     $query->where('kd_poli', $this->kd_poli);
                 }
 
-                return $query->with(['poli', 'dokter', 'pasien']);
+                if ($this->kd_dokter) {
+                    $query->where('kd_dokter', $this->kd_dokter);
+                }
+
+                return $query->with(['dokter', 'pasien', 'poli', 'jadwal_dokter'])->whereHas('jadwal_dokter');
             })
             ->defaultSort('no_rawat', 'desc')
             ->selectable()
@@ -161,7 +199,7 @@ class DokterOff extends Page implements HasForms, HasTable
         foreach ($records as $record) {
             // Panggil fungsi untuk generate pesan
             $message = $this->generateNotificationMessage($record);
-            
+
             // Kirim pesan ke WhatsApp menggunakan job
             \App\Jobs\SendWhatsApp::dispatch($message, $record->pasien->no_tlp, $this->getWahaSesstionName())
                 ->delay($latTime)
@@ -200,30 +238,54 @@ class DokterOff extends Page implements HasForms, HasTable
             ? \Carbon\Carbon::parse($this->tgl_registrasi)->translatedFormat('l, d F Y')
             : 'ini';
 
-        $hariPraktik = $this->tgl_praktik
-            ? \Carbon\Carbon::parse($this->tgl_praktik)->translatedFormat('l, d F Y')
+        $hariPraktik = $this->q_tgl_praktik
+            ? \Carbon\Carbon::parse($this->q_tgl_praktik)->translatedFormat('l, d F Y')
             : 'ini';
+
+        $hariKerja = Str::upper(\Illuminate\Support\Carbon::parse($this->q_tgl_praktik)->translatedFormat('l'));
+        $poliBaru = $this->q_kd_poli
+            ? \App\Models\JadwalPoliklinik::where('kd_poli', $this->q_kd_poli)
+                ->whereDate('hari_kerja', $hariKerja)
+                ->where('kd_dokter', $this->kd_dokter)
+                ->first()
+            : null;
 
         // Gunakan data default jika tidak ada record (untuk preview)
         $namaDokter = $record?->dokter?->nm_dokter ?? 'Nama Dokter';
-        $namaPoli   = $record?->poli?->nm_poli ?? 'Nama Poliklinik';
+        $jamMulaiPoli = $record?->jadwal_dokter?->jam_mulai ?? null;
+        $jamSelesaiPoli = $record?->jadwal_dokter?->jam_selesai ?? null;
 
         $text = '';
         $text .= 'Assalamualaikum wr. wb.' . '<br />';
         $text .= 'Selamat siang Bapak/Ibu 🙏😊' . '<br /><br />';
 
-        $text .= "Kepada pasien <i><b>{$namaDokter}</b></i>, hari {$hariRegistrasi}, poliklinik {$namaPoli} {$namaDokter} <strong>TUTUP PRAKTIK</strong>." . '<br />';
+        $text .= "Kepada pasien <i><b>{$namaDokter}</b></i>, hari {$hariRegistrasi}, poliklinik {$namaDokter} (" . ($jamMulaiPoli && $jamSelesaiPoli ? \Carbon\Carbon::parse($jamMulaiPoli)->translatedFormat('H:i') . " - " . \Carbon\Carbon::parse($jamSelesaiPoli)->translatedFormat('H:i') : '') . ") <strong>TUTUP PRAKTIK</strong>." . '<br />';
         $text .= 'Pasien dapat mengatur ulang jadwal periksa' . (
-            $this->tgl_praktik 
-                ? " pada hari {$hariPraktik}." 
-                : ' di hari lain.'
-            ) . '<br /><br />';
+            $this->q_tgl_praktik && $poliBaru
+            ? " pada hari {$hariPraktik}" . ($poliBaru ? ' (' . \Carbon\Carbon::parse($poliBaru->jam_mulai)->translatedFormat('H:i') . " - " . \Carbon\Carbon::parse($poliBaru->jam_selesai)->translatedFormat('H:i') . ')' : '.') . '.'
+            : ' di hari lain.'
+        ) . '<br /><br />';
 
         $text .= 'Kami sangat menghargai jika Bapak/Ibu dapat memberikan konfirmasi penerimaan informasi ini.' . '<br />';
         $text .= 'Terima kasih atas perhatian dan pengertiannya 🙏' . '<br /><br />';
 
-        $text .= '<i><b>RSIA AISYIYAH PEKAJANGAN</b></i>';
+        $text .= '<b>RSIA AISYIYAH PEKAJANGAN</b>' . '<br />';
+        $text .= 'pertanyaan dan informasi dapat disampaikan ke nomor 085640009934';
 
         return $text;
+    }
+
+    protected function setPoliOptions(): void
+    {
+        $hariKerja = Str::upper(\Illuminate\Support\Carbon::parse($this->q_tgl_praktik)->translatedFormat('l'));
+        $this->q_kd_poli_options = \App\Models\JadwalPoliklinik::with('poliklinik')
+            ->where('hari_kerja', $hariKerja)
+            ->where('kd_dokter', $this->kd_dokter)
+            ->get()
+            ->mapWithKeys(fn($item) => [
+                $item->kd_poli => optional($item->poliklinik)->nm_poli
+                    . ' (' . \Carbon\Carbon::parse($item->jam_mulai)->translatedFormat('H:i')
+                    . ' - ' . \Carbon\Carbon::parse($item->jam_selesai)->translatedFormat('H:i') . ')',
+            ]);
     }
 }
