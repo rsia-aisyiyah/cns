@@ -74,8 +74,10 @@ class PegawaiResource extends Resource
                     ->searchable(),
             ])
             ->actions([
+                // 
             ])
             ->bulkActions([
+                // 
             ]);
     }
 
