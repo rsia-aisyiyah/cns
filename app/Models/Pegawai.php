@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Model;
 
 class Pegawai extends Model
 {
-    protected $connection = 'mysql_2';
+    protected $connection = 'mysql';
 
     protected $table = 'pegawai';
 

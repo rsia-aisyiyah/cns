@@ -14,18 +14,54 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
 
-    protected $connection = 'mysql_2';
+    /**
+     * The Eloquent query builder class to use for the model.
+     *
+     * @var class-string<\Illuminate\Database\Eloquent\Builder<*>>
+     */
+    protected static string $builder = \App\Builder\AesDatabaseBuilder::class;
 
+    /**
+     * The connection name for the model.
+     *
+     * @var string|null
+     */
+    protected $connection = 'mysql';
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'user';
 
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
     protected $primaryKey = 'id_user';
 
+    /**
+     * The data type of the primary key.
+     *
+     * @var string
+     */
     protected $keyType = 'string';
 
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
     public $timestamps = false;
 
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
     public $incrementing = false;
-
 
     /**
      * The attributes that are mass assignable.

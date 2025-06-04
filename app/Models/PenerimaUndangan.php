@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PenerimaUndangan extends Model
 {
-    protected $connection = 'mysql_2';
+    protected $connection = 'mysql';
 
     protected $table = 'rsia_penerima_undangan';
 

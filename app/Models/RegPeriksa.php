@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class RegPeriksa extends Model
 {
-    protected $connection = 'mysql_2';
+    protected $connection = 'mysql';
 
     /**
      * The table associated with the model.
