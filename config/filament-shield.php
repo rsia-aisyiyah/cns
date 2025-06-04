@@ -23,13 +23,13 @@ return [
     'super_admin' => [
         'enabled' => true,
         'name' => 'super_admin',
-        'define_via_gate' => false,
+        'define_via_gate' => true,
         'intercept_gate' => 'before', // after
     ],
 
     'panel_user' => [
         'enabled' => true,
-        'name' => 'panel_user',
+        'name' => 'nomad',
     ],
 
     'permission_prefixes' => [
@@ -40,8 +40,6 @@ return [
             'update',
             'restore',
             'restore_any',
-            'replicate',
-            'reorder',
             'delete',
             'delete_any',
             'force_delete',
