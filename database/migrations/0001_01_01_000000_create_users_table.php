@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @var string|null
      */
-    protected $connection = 'mysql_2';
+    protected $connection = 'mysql';
 
     /**
      * Run the migrations.
