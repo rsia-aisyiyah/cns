@@ -35,11 +35,12 @@ class RsiaDispatchPasienKontrol extends Command
         $tanggalLabel = $targetDate->translatedFormat('l, d F Y');
 
         $baseDelay = Carbon::today()->setTimeFromTimeString(
-            $this->option('besok') ? '03:30:00' : '09:00:00'
+            $this->option('besok') ? '05:00:00' : '09:00:00'
         );
 
         $records = RegPeriksa::with(['dokter', 'poli', 'pasien'])
             ->whereDate('tgl_registrasi', $targetDate->toDateString())
+            ->whereHas('jadwal_dokter')
             ->get();
 
         if ($records->isEmpty()) {
@@ -63,17 +64,20 @@ class RsiaDispatchPasienKontrol extends Command
                 ->first();
 
             $msg  = "Halo, {$nmPasien}! 👋" . "<br />";
-            $msg .="Ini adalah pengingat untuk jadwal kontrol kesehatan Anda yang telah dijadwalkan pada:" . "<br /><br />";
+            $msg .= "Ini adalah pengingat untuk jadwal kontrol kesehatan Anda yang telah dijadwalkan pada:" . "<br /><br />";
 
-            $msg .="🗓 *Tanggal* : {$registrasi}" . "<br />";
-            $msg .="⌛ *Waktu* : " . Carbon::parse($jam->jam_mulai)->translatedFormat('H:i') . " WIB - Selesai" . "<br />";
-            $msg .="🏥 *Poliklinik* : {$poli}" . "<br />";
-            $msg .="🩺 *Dokter* : {$dokter}" . "<br /><br />";
+            $msg .= "🗓 *Tanggal* : {$registrasi}" . "<br />";
+            $msg .= "⌛ *Waktu* : " . Carbon::parse($jam->jam_mulai)->translatedFormat('H:i') . " WIB - Selesai" . "<br />";
+            $msg .= "🏥 *Poliklinik* : {$poli}" . "<br />";
+            $msg .= "🩺 *Dokter* : {$dokter}" . "<br /><br />";
 
-            $msg .="Pastikan untuk hadir tepat waktu dan membawa dokumen yang diperlukan. Jika ada perubahan atau Anda tidak dapat hadir, mohon beri tahu kami secepatnya." . "<br /><br />";
-            $msg .="Terima kasih, semoga sehat selalu! 😊";
+            $msg .= "Pastikan untuk hadir tepat waktu dan membawa dokumen yang diperlukan. Jika ada perubahan atau Anda tidak dapat hadir, mohon beri tahu kami secepatnya." . "<br /><br />";
+            $msg .= "Terima kasih, <br />Sehat dan Bahagia bersama kami! 😊" . "<br /><br />";
 
-            SendWhatsApp::dispatch($msg, $receiver, config('waha.sessions.pendaftaran'))
+            $msg .= '<b>RSIA AISYIYAH PEKAJANGAN</b>' . '<br /> -----<br />';
+            $msg .= 'pertanyaan dan informasi dapat disampaikan ke nomor 085640009934';
+
+            SendWhatsApp::dispatch($msg, $receiver, config('waha.sessions.byu-ferry.name'))
                 ->delay($baseDelay)
                 ->onQueue('whatsapp');
 

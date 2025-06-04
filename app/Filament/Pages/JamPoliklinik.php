@@ -151,7 +151,7 @@ class JamPoliklinik extends Page implements HasForms, HasTable
                     $query->where('kd_poli', $this->kd_poli);
                 }
 
-                return $query->with(['poli', 'dokter', 'pasien']);
+                return $query->with(['poli', 'dokter', 'pasien'])->whereHas('jadwal_dokter');
             })
             ->defaultSort('no_rawat', 'desc')
             ->selectable()
@@ -203,18 +203,17 @@ class JamPoliklinik extends Page implements HasForms, HasTable
         $jamMulai = $queueFormState['jam_mulai'];
         $jamSelesai = $queueFormState['disableJamSelesai'] ? 'Selesai' : $queueFormState['jam_selesai'];
 
-        // Ambil record yang dipilih pada tabel
-        $selectedRecords = $this->getTable()->getLivewire()->getAllSelectableTableRecordKeys();
-        $nomorRawat = '-';
-
-        if (count($selectedRecords) > 0) {
-            // Pilih nomor rawat secara acak dari yang terpilih
-            $randomRecord = $selectedRecords[array_rand($selectedRecords)];
-            $nomorRawat = $randomRecord;
+        // Pastikan $records adalah collection
+        $records = $this->getTable()->getRecords();
+        if ($records instanceof \Illuminate\Pagination\LengthAwarePaginator) {
+            $records = collect($records->items());
         }
 
+        $randomRecord = $records->isNotEmpty() ? $records->random() : null;
+        // $nama = $randomRecord?->pasien?->nm_pasien ?? '[ NAMA PASIEN ]';
+
         // Panggil fungsi untuk generate pesan
-        return $this->generateNotificationMessage($nomorRawat, $jamMulai, $jamSelesai);
+        return $this->generateNotificationMessage($randomRecord, $jamMulai, $jamSelesai);
     }
 
     public function handleNotify(Collection $records): void
@@ -248,25 +247,15 @@ class JamPoliklinik extends Page implements HasForms, HasTable
 
     private function generateNotificationMessage(string|RegPeriksa $record, string $jamMulai, string|null $jamSelesai): string
     {
-        $noRawat = $record;
+        $nama = $record;
+        $dokter = '[ NAMA DOKTER ]';
         if ($record instanceof RegPeriksa) {
-            $noRawat = $record->no_rawat;
+            $nama = $record?->pasien?->nm_pasien ?? '[ NAMA PASIEN ]';
+            $dokter = $record?->dokter?->nm_dokter ?? '[ NAMA DOKTER ]';
         }
 
         // Format tanggal registrasi
         $tglRegistrasi = \Carbon\Carbon::parse($this->tgl_registrasi)->translatedFormat('l, d F Y');
-
-        // Dokter
-        $dokter = 'Nama Dokter';
-        if ($this->kd_dokter) {
-            $dokter = \App\Models\Dokter::find($this->kd_dokter)->nm_dokter ?? 'Nama Dokter';
-        } else {
-            if ($record instanceof RegPeriksa) {
-                $dokter = $record->dokter->nm_dokter;
-            } else {
-                $dokter = "Nama Dokter";
-            }
-        }
 
         // Jadwal
         $jadwal = null;
@@ -296,12 +285,12 @@ class JamPoliklinik extends Page implements HasForms, HasTable
         }
 
         $html = '';
-        $html .= 'Yth. Pemilik Nomor Registrasi:<br />';
-        $html .= '<strong>' . $noRawat . '</strong><br /><br />';
-        $html .= 'Kami informasikan adanya perubahan jam praktik untuk dokter <strong>' . $dokter . '</strong> pada <strong>' . $tglRegistrasi . '</strong>' . $jadwalText . ' menjadi jam <span class="px-2 text-nowrap bg-emerald-200 dark:bg-emerald-600 rounded"><strong class="font-semibold">' . $jamMulai . ' s/d ' . ($jamSelesai ?? 'selesai') . '</strong></span>.<br /><br />';
+        $html .= 'Yth. Bpk/Ibu :<br />';
+        $html .= '<strong>' . $nama . '</strong><br /><br />';
+        $html .= 'Kami informasikan adanya perubahan jam praktik untuk dokter <strong>' . $dokter . '</strong> pada <strong>' . $tglRegistrasi . '</strong>' . ' menjadi jam <span class="px-2 text-nowrap bg-emerald-200 dark:bg-emerald-600 rounded"><strong class="font-semibold">' . $jamMulai . ' s/d ' . ($jamSelesai ?? 'selesai') . '</strong></span>.<br /><br />';
         $html .= 'Mohon maaf atas ketidaknyamanan 🙏🏻🙏🏻.<br />';
         $html .= 'Terima kasih atas perhatian dan kerjasamanya.' . '<br /><br />';
-        $html .= '<b>RSIA AISYIYAH PEKAJANGAN</b>' . '<br />';
+        $html .= '<b>RSIA AISYIYAH PEKAJANGAN</b>' . '<br />-----<br />';
         $html .= 'pertanyaan dan informasi dapat disampaikan ke nomor 085640009934';
 
         return $html;
