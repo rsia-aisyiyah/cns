@@ -35,6 +35,16 @@ class AesUserProvider implements \Illuminate\Contracts\Auth\UserProvider
     }
 
     /**
+     * Get the Eloquent user model.
+     *
+     * @return string
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
      * Retrieve a user by their unique identifier.
      *
      * @param  mixed  $identifier
@@ -45,10 +55,8 @@ class AesUserProvider implements \Illuminate\Contracts\Auth\UserProvider
         $model = $this->createModel();
 
         return $this->newModelQuery($model)
-            ->select(
-                DB::raw('AES_DECRYPT(id_user, "' . env('MYSQL_AES_KEY_IDUSER') . '") as id_user'),
-            )
-            ->where('id_user', DB::raw('AES_ENCRYPT("' . $identifier . '", "' . env('MYSQL_AES_KEY_IDUSER') . '")'))
+            ->select([ DB::raw('AES_DECRYPT(id_user, "' . env('MYSQL_AES_KEY_IDUSER') . '") AS id_user') ])
+            ->where('id_user', $identifier)
             ->first();
     }
 
@@ -90,9 +98,9 @@ class AesUserProvider implements \Illuminate\Contracts\Auth\UserProvider
 
         $query = $this->newModelQuery();
 
-        $query->select(DB::raw('AES_DECRYPT(id_user, "' . env('MYSQL_AES_KEY_IDUSER') . '") as id_user'))
-            ->where('id_user', DB::raw('AES_ENCRYPT("' . $credentials['username'] . '", "' . env('MYSQL_AES_KEY_IDUSER') . '")'))
-            ->where('password', DB::raw('AES_ENCRYPT("' . $credentials['password'] . '", "' . env('MYSQL_AES_KEY_PASSWORD') . '")'));
+        $query->select([ DB::raw('AES_DECRYPT(id_user, "' . env('MYSQL_AES_KEY_IDUSER') . '") AS id_user') ])
+            ->where('id_user', $credentials['username'])
+            ->where('password', $credentials['password']);
 
         return $query->first();
     }
@@ -110,20 +118,19 @@ class AesUserProvider implements \Illuminate\Contracts\Auth\UserProvider
             return false;
         }
 
-        // Ambil password terenkripsi dari database
-        $query = $this->newModelQuery();
-        $query->select(DB::raw('AES_DECRYPT(password, "' . env('MYSQL_AES_KEY_PASSWORD') . '") as password_plain'))
-            ->where('id_user', DB::raw('AES_ENCRYPT("' . $credentials['username'] . '", "' . env('MYSQL_AES_KEY_IDUSER') . '")'));
+        $user = \App\Models\User::select([
+            DB::raw('AES_DECRYPT(id_user, "' . env('MYSQL_AES_KEY_IDUSER') . '") AS id_user'),
+            DB::raw('AES_DECRYPT(password, "' . env('MYSQL_AES_KEY_PASSWORD') . '") AS password'),
+        ])->where('id_user', $credentials['username'])->first();
 
-        $passwordDecrypted = $query->first();
-
-        if (!$passwordDecrypted) {
+        if (!$user) {
             return false;
         }
 
-        unset($user->password);
+        $isTrue = $credentials['password'] == $user->password;
+        unset($user->password); 
 
-        return $credentials['password'] === $passwordDecrypted->password_plain;
+        return $isTrue;
     }
 
     /**
@@ -141,15 +148,10 @@ class AesUserProvider implements \Illuminate\Contracts\Auth\UserProvider
             return;
         }
 
-        // Dapatkan ID terenkripsi user
-        $idUserEncrypted = DB::raw('AES_ENCRYPT("' . $credentials['username'] . '", "' . env('MYSQL_AES_KEY_IDUSER') . '")');
-
         // Update password terenkripsi dengan kunci baru
         DB::table($this->createModel()->getTable())
-            ->where('id_user', $idUserEncrypted)
-            ->update([
-                'password' => DB::raw('AES_ENCRYPT("' . $credentials['password'] . '", "' . env('MYSQL_AES_KEY_PASSWORD') . '")'),
-            ]);
+            ->where('id_user', $credentials['username'])
+            ->update(['password' => DB::raw('AES_ENCRYPT("' . $credentials['password'] . '", "' . env('MYSQL_AES_KEY_PASSWORD') . '")'),]);
     }
 
 
