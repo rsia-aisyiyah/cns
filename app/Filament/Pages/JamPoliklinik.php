@@ -22,6 +22,7 @@ use Filament\Tables\Concerns\InteractsWithTable;
 
 class JamPoliklinik extends Page implements HasForms, HasTable
 {
+    use \BezhanSalleh\FilamentShield\Traits\HasPageShield;
     use InteractsWithTable;
     use InteractsWithForms;
 
@@ -55,7 +56,7 @@ class JamPoliklinik extends Page implements HasForms, HasTable
 
     public function getWahaSesstionName(): string
     {
-        return config('waha.default.session');
+        return config('waha.sessions.byu-ferry.name');
     }
 
     public function getForms(): array
@@ -245,7 +246,7 @@ class JamPoliklinik extends Page implements HasForms, HasTable
             ->send();
     }
 
-    private function generateNotificationMessage(string|RegPeriksa $record, string $jamMulai, string $jamSelesai): string
+    private function generateNotificationMessage(string|RegPeriksa $record, string $jamMulai, string|null $jamSelesai): string
     {
         $noRawat = $record;
         if ($record instanceof RegPeriksa) {
@@ -297,9 +298,11 @@ class JamPoliklinik extends Page implements HasForms, HasTable
         $html = '';
         $html .= 'Yth. Pemilik Nomor Registrasi:<br />';
         $html .= '<strong>' . $noRawat . '</strong><br /><br />';
-        $html .= 'Kami informasikan adanya perubahan jam praktik untuk dokter <strong>' . $dokter . '</strong> pada <strong>' . $tglRegistrasi . '</strong>' . $jadwalText . ' menjadi jam <span class="px-2 text-nowrap bg-emerald-200 dark:bg-emerald-600 rounded"><strong class="font-semibold">' . $jamMulai . ' s/d ' . $jamSelesai . '</strong></span>.<br /><br />';
+        $html .= 'Kami informasikan adanya perubahan jam praktik untuk dokter <strong>' . $dokter . '</strong> pada <strong>' . $tglRegistrasi . '</strong>' . $jadwalText . ' menjadi jam <span class="px-2 text-nowrap bg-emerald-200 dark:bg-emerald-600 rounded"><strong class="font-semibold">' . $jamMulai . ' s/d ' . ($jamSelesai ?? 'selesai') . '</strong></span>.<br /><br />';
         $html .= 'Mohon maaf atas ketidaknyamanan 🙏🏻🙏🏻.<br />';
-        $html .= 'Terima kasih atas perhatian dan kerjasamanya.';
+        $html .= 'Terima kasih atas perhatian dan kerjasamanya.' . '<br /><br />';
+        $html .= '<b>RSIA AISYIYAH PEKAJANGAN</b>' . '<br />';
+        $html .= 'pertanyaan dan informasi dapat disampaikan ke nomor 085640009934';
 
         return $html;
     }

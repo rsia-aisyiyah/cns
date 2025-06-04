@@ -20,6 +20,7 @@ use Filament\Tables\Concerns\InteractsWithTable;
 
 class DokterOff extends Page implements HasForms, HasTable
 {
+    use \BezhanSalleh\FilamentShield\Traits\HasPageShield;
     use InteractsWithTable;
     use InteractsWithForms;
 
