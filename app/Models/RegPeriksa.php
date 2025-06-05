@@ -66,6 +66,18 @@ class RegPeriksa extends Model
         return $this->belongsTo(Dokter::class, 'kd_dokter', 'kd_dokter');
     }
 
+    public function spesialis()
+    {
+        return $this->hasOneThrough(
+            Spesialis::class,
+            Dokter::class,
+            'kd_dokter', // Foreign key on Dokter table
+            'kd_sps',    // Foreign key on Spesialis table
+            'kd_dokter', // Local key on RegPeriksa table
+            'kd_sps'     // Local key on Dokter table
+        );
+    }
+
     public function poli()
     {
         return $this->belongsTo(Poliklinik::class, 'kd_poli', 'kd_poli');
@@ -76,5 +88,10 @@ class RegPeriksa extends Model
         $hari = \Carbon\Carbon::parse($this->tgl_registrasi)->locale('id')->isoFormat('dddd');
         return $this->belongsTo(JadwalPoliklinik::class, ['kd_dokter', 'kd_poli'], ['kd_dokter', 'kd_poli'])
             ->where('hari_kerja', $hari);
+    }
+
+    public function sep()
+    {
+        return $this->hasOne(BridgingSep::class, 'no_rawat', 'no_rawat');
     }
 }
