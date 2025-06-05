@@ -14,7 +14,9 @@ class RsiaDispatchPasienKontrol extends Command
      *
      * @var string
      */
-    protected $signature = 'rsia:dispatch-pasien-kontrol {--besok : Ambil pasien kontrol untuk besok, (default: hari ini)}';
+    protected $signature = 'rsia:dispatch-pasien-kontrol 
+        {--besok : Ambil pasien kontrol untuk besok, (default: hari ini)}
+    ';
 
     /**
      * The console command description.
