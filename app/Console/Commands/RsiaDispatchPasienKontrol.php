@@ -41,6 +41,7 @@ class RsiaDispatchPasienKontrol extends Command
         );
 
         $records = RegPeriksa::with(['dokter', 'poli', 'pasien'])
+            ->where('status_bayar', 'Belum Bayar')
             ->whereDate('tgl_registrasi', $targetDate->toDateString())
             ->whereHas('jadwal_dokter')
             ->get();
