@@ -271,7 +271,7 @@ class DokterOff extends Page implements HasForms, HasTable
         $text .= 'Terima kasih atas perhatian dan pengertiannya 🙏' . '<br /><br />';
 
         $text .= '<b>RSIA AISYIYAH PEKAJANGAN</b>' . '<br />-----<br />';
-        $text .= 'pertanyaan dan informasi dapat disampaikan ke nomor 085640009934';
+        $text .= 'Pesan ini dikirim otomatis, pertanyaan dan informasi dapat disampaikan ke nomor 085640009934';
 
         return $text;
     }

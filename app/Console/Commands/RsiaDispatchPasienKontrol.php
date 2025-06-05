@@ -75,7 +75,7 @@ class RsiaDispatchPasienKontrol extends Command
             $msg .= "Terima kasih, <br />Sehat dan Bahagia bersama kami! 😊" . "<br /><br />";
 
             $msg .= '<b>RSIA AISYIYAH PEKAJANGAN</b>' . '<br /> -----<br />';
-            $msg .= 'pertanyaan dan informasi dapat disampaikan ke nomor 085640009934';
+            $msg .= 'Pesan ini dikirim otomatis, pertanyaan dan informasi dapat disampaikan ke nomor 085640009934';
 
             SendWhatsApp::dispatch($msg, $receiver, config('waha.sessions.byu-ferry.name'))
                 ->delay($baseDelay)
