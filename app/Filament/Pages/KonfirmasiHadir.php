@@ -187,12 +187,12 @@ class KonfirmasiHadir extends Page implements HasForms, HasTable
             ->send();
     }
 
-    private function generateNotificationMessage(RegPeriksa $record): string
+    private function generateNotificationMessage(null|RegPeriksa $record): string
     {
         $nama = $record?->pasien?->nm_pasien ?? '[ NAMA PASIEN ]';
         $dokter = $record?->dokter?->nm_dokter ?? '[ NAMA DOKTER ]';
 
-
+        // ----------
 
         $text = "Assalamualaikum wr. wb." . "<br />";
         $text .= "Selamat ". \App\Helpers\TimeHelper::getState(Carbon::now()->translatedFormat("H:i")) ." Bapak/Ibu {$nama} 🙏😊"  . "<br /><br />";

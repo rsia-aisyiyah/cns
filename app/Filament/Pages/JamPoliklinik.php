@@ -245,7 +245,7 @@ class JamPoliklinik extends Page implements HasForms, HasTable
             ->send();
     }
 
-    private function generateNotificationMessage(string|RegPeriksa $record, string $jamMulai, string|null $jamSelesai): string
+    private function generateNotificationMessage(null|RegPeriksa $record, string $jamMulai, string|null $jamSelesai): string
     {
         $nama = $record;
         $dokter = '[ NAMA DOKTER ]';
