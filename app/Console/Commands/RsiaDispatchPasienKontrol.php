@@ -73,7 +73,7 @@ class RsiaDispatchPasienKontrol extends Command
             $msg .= "🏥 *Poliklinik* : {$poli}" . "<br />";
             $msg .= "🩺 *Dokter* : {$dokter}" . "<br /><br />";
 
-            $msg .= "Pastikan untuk hadir tepat waktu dan membawa dokumen yang diperlukan. Jika ada perubahan atau Anda tidak dapat hadir, mohon beri tahu kami secepatnya." . "<br /><br />";
+            $msg .= "Pastikan untuk hadir tepat waktu dan membawa dokumen yang diperlukan. <b>Jika ada perubahan atau Anda tidak dapat hadir, mohon beri tahu kami secepatnya ke nomor 085640009934.<b>" . "<br /><br />";
             $msg .= "Terima kasih, <br />Sehat dan Bahagia bersama kami! 😊" . "<br /><br />";
 
             $msg .= '<b>RSIA AISYIYAH PEKAJANGAN</b>' . '<br /> -----<br />';
