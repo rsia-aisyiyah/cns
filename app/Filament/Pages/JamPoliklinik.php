@@ -291,7 +291,7 @@ class JamPoliklinik extends Page implements HasForms, HasTable
         $html .= 'Mohon maaf atas ketidaknyamanan 🙏🏻🙏🏻.<br />';
         $html .= 'Terima kasih atas perhatian dan kerjasamanya.' . '<br /><br />';
         $html .= '<b>RSIA AISYIYAH PEKAJANGAN</b>' . '<br />-----<br />';
-        $html .= 'Pesan ini dikirim otomatis, pertanyaan dan informasi dapat disampaikan ke nomor 085640009934';
+        $html .= 'pertanyaan dan informasi dapat disampaikan ke nomor 085640009934';
 
         return $html;
     }
