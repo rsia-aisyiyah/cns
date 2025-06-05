@@ -195,20 +195,19 @@ class KonfirmasiHadir extends Page implements HasForms, HasTable
         // ----------
 
         $text = "Assalamualaikum wr. wb." . "<br />";
-        $text .= "Selamat ". \App\Helpers\TimeHelper::getState(Carbon::now()->translatedFormat("H:i")) ." Bapak/Ibu {$nama} 🙏😊"  . "<br /><br />";
+        $text .= "RSIA AISYIYAH PEKAJANGAN" . "<br /><br />";
 
-        $text .= "Kami dari <b>RSIA Aisyiyah Pekajangan</b> ingin mengonfirmasi kehadiran Anda pada jadwal pemeriksaan yang telah terdaftar sebagai berikut:" . "<br /><br />";
+        $text .= "Selamat ". \App\Helpers\TimeHelper::getState(Carbon::now()->translatedFormat("H:i")) ." Ibu {$nama} 🙏😊"  . "<br /><br />";
 
-        $text .= "🗓 <b>Tanggal</b> : " . Carbon::parse($this->tgl_registrasi)->translatedFormat("l, d F Y") . "<br />";
-        $text .= "⌛ <b>Waktu</b> : {$record?->jadwal_dokter?->jam_mulai} WIB - Selesai" . "<br />";
-        $text .= "🏥 <b>Poliklinik</b> : {$record?->poli?->nm_poli}" . "<br />";
-        $text .= "🩺 <b>Dokter</b> : {$dokter}" . "<br /><br />";
+        $text .= "Mohon izin menginformasikan untuk poli <b>{$record?->poli?->nm_poli}</b> <b>{$dokter}</b> untuk hari ini sudah dimulai." . "<br />";
+        $text .= "dimohon segera datang 🙏" . "<br /><br />";
 
-        $text .= "<b>Mohon konfirmasi kehadiran Bapak/Ibu dengan membalas pesan ini</b>. Jika ada perubahan rencana atau Anda berhalangan hadir, silakan informasikan kepada kami agar dapat kami bantu penjadwalan ulang." . "<br /><br />";
+        $text .= "Apakah pasien hadir periksa untuk hari ini ?"  . "<br />";
+        $text .= "Kami tunggu balasan dari pasien" . "<br />";
+        $text .= "Apabila pasien berhalangan hadir dimohon untuk mengkonfirmasi kami." . "<br /><br />";
 
         $text .= "Terima kasih atas perhatian dan kerjasamanya 🙏" . "<br /><br />";
-        
-        $text .= "RSIA AISYIYAH PEKAJANGAN" . "<br />";
+
         $text .= "Sehat dan Bahagia bersama kami! 😊";
 
         return $text;
