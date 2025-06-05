@@ -70,7 +70,8 @@ class PasienResource extends Resource
                 //
             ])
             ->actions([
-                // 
+                // edit action
+                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 // 

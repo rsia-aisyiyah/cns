@@ -12,8 +12,6 @@ class Pasien extends Model
 
     protected $primaryKey = 'no_rkm_medis';
 
-    protected $hidden = ['no_ktp', 'no_peserta'];
-
     protected $guarded = [];
 
     protected $casts = [
