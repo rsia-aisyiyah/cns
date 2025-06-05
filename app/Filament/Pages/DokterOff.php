@@ -252,7 +252,7 @@ class DokterOff extends Page implements HasForms, HasTable
             : null;
 
         // Gunakan data default jika tidak ada record (untuk preview)
-        $namaDokter = $record?->dokter?->nm_dokter ?? 'Nama Dokter';
+        $namaDokter = $record?->dokter?->nm_dokter ?? '[ NAMA DOKTER ]';
         $jamMulaiPoli = $record?->jadwal_dokter?->jam_mulai ?? null;
         $jamSelesaiPoli = $record?->jadwal_dokter?->jam_selesai ?? null;
 
@@ -260,7 +260,7 @@ class DokterOff extends Page implements HasForms, HasTable
         $text .= 'Assalamualaikum wr. wb.' . '<br />';
         $text .= 'Selamat siang Bapak/Ibu 🙏😊' . '<br /><br />';
 
-        $text .= "Kepada pasien <i><b>{$namaDokter}</b></i>, hari {$hariRegistrasi}, poliklinik {$namaDokter} (" . ($jamMulaiPoli && $jamSelesaiPoli ? \Carbon\Carbon::parse($jamMulaiPoli)->translatedFormat('H:i') . " - " . \Carbon\Carbon::parse($jamSelesaiPoli)->translatedFormat('H:i') : '') . ") <strong>TUTUP PRAKTIK</strong>." . '<br />';
+        $text .= "Kepada pasien <i><b>{$namaDokter}</b></i>, hari {$hariRegistrasi}, poliklinik {$namaDokter} (" . ($jamMulaiPoli && $jamSelesaiPoli ? \Carbon\Carbon::parse($jamMulaiPoli)->translatedFormat('H:i') . " - " . \Carbon\Carbon::parse($jamSelesaiPoli)->translatedFormat('H:i') : ' JAM PRAKTIK ') . ") <strong>TUTUP PRAKTIK</strong>." . '<br />';
         $text .= 'Pasien dapat mengatur ulang jadwal periksa' . (
             $this->q_tgl_praktik && $poliBaru
             ? " pada hari {$hariPraktik}" . ($poliBaru ? ' (' . \Carbon\Carbon::parse($poliBaru->jam_mulai)->translatedFormat('H:i') . " - " . \Carbon\Carbon::parse($poliBaru->jam_selesai)->translatedFormat('H:i') . ')' : '.') . '.'
