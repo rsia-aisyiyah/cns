@@ -73,14 +73,12 @@ class SendWhatsApp implements ShouldQueue
         if ($response->successful()) {
             Log::channel('whatsapp')->info("Whatsapp sent to $refinedPhoneNumber", [
                 'receiver' => $refinedPhoneNumber,
-                'message'  => $this->htmlToWhatsAppText($this->message),
                 'status'   => $response->status(),
                 'response' => $response->body(),
             ]);
         } else {
             Log::channel('whatsapp')->error("Failed to send whatsapp to $refinedPhoneNumber", [
                 'receiver' => $refinedPhoneNumber,
-                'message'  => $this->htmlToWhatsAppText($this->message),
                 'response' => $response->body(),
                 'status'   => $response->status(),
             ]);

@@ -37,7 +37,7 @@ class RsiaDispatchPasienKontrol extends Command
         $tanggalLabel = $targetDate->translatedFormat('l, d F Y');
 
         $baseDelay = Carbon::today()->setTimeFromTimeString(
-            $this->option('besok') ? '05:00:00' : '09:00:00'
+            $this->option('besok') ? '09:00:00' : '05:00:00'
         );
 
         $records = RegPeriksa::with(['dokter', 'poli', 'pasien'])
