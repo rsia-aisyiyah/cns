@@ -29,6 +29,11 @@ class BridgingSuratKontrolBPJS extends Model
         return $this->belongsTo(BridgingSep::class, 'no_sep', 'no_sep');
     }
 
+    public function sep2()
+    {
+        return $this->belongsTo(BridgingSep::class, 'no_surat', 'noskdp');
+    }
+
     public function referensiJkn()
     {
         return $this->belongsTo(ReferensiMobileJknBPJS::class, 'no_surat', 'nomorreferensi');

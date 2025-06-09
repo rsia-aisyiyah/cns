@@ -199,14 +199,14 @@ class KonfirmasiHadir extends Page implements HasForms, HasTable
 
         $text .= "Selamat ". \App\Helpers\TimeHelper::getState(Carbon::now()->translatedFormat("H:i")) ." Ibu {$nama} 🙏😊"  . "<br /><br />";
 
-        $text .= "Mohon izin menginformasikan untuk poli <b>{$record?->poli?->nm_poli}</b> <b>{$dokter}</b> untuk hari ini sudah dimulai." . "<br />";
-        $text .= "dimohon segera datang 🙏" . "<br /><br />";
+        $text .= "Menginformasikan untuk poli <b>{$record?->poli?->nm_poli}</b> <b>{$dokter}</b> untuk hari ini sudah dimulai." . "<br />";
+        $text .= "dimohon segera datang" . "<br /><br />";
 
         $text .= "Apakah pasien hadir periksa untuk hari ini ?"  . "<br />";
         $text .= "Kami tunggu balasan dari pasien" . "<br />";
         $text .= "Apabila pasien berhalangan hadir dimohon untuk mengkonfirmasi kami." . "<br /><br />";
 
-        $text .= "Terima kasih atas perhatian dan kerjasamanya 🙏" . "<br /><br />";
+        $text .= "Terima kasih" . "<br /><br />";
 
         $text .= "Sehat dan Bahagia bersama kami! 😊";
 

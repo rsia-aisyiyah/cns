@@ -51,7 +51,7 @@ class DokterOff extends Page implements HasForms, HasTable
 
     public function getWahaSesstionName(): string
     {
-        return config('waha.sessions.byu-ferry.name');
+        return config('waha.sessions.pendaftaran.name');
     }
 
     public function getForms(): array

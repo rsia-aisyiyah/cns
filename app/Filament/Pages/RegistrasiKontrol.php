@@ -37,13 +37,14 @@ class RegistrasiKontrol extends Page implements HasForms, HasTable
                     ->select(['no_sep', 'no_surat', 'tgl_surat', 'tgl_rencana', 'kd_dokter_bpjs'])
                     ->where('tgl_rencana', '>=', now()->format('Y-m-d'))
                     ->whereDoesntHave('referensiJkn')
-                    ->whereHas('sep', function ($query) {
-                        $query->where('jnspelayanan', '1');
+                    ->whereDoesntHave('sep2')
+                    ->whereHas('sep', function ($query): void {
+                        $query->where('jnspelayanan','<>', '0');
                     });
 
                 return $query->with([
                     'dokter.spesialis',
-                    'sep' => fn ($query) => $query->select(['no_sep', 'nama_pasien', 'nomr', 'nmdpdjp']),
+                    'sep' => fn ($query) => $query->select(['no_sep', 'nama_pasien', 'nomr', 'nmdpdjp','jnspelayanan']),
                     'sep.pasien' => fn ($query) => $query->select(['no_rkm_medis', 'nm_pasien', 'no_tlp']),
                 ]);
             })
@@ -85,6 +86,12 @@ class RegistrasiKontrol extends Page implements HasForms, HasTable
                     ->date()
                     ->sortable()
                     ->searchable(),
+
+                Tables\Columns\TextColumn::make('sep.jnspelayanan')
+                    ->label('Pelayanan Asal')
+                    ->sortable()
+                    ->searchable()
+                    ->getStateUsing(fn($record) => $record->sep->jnspelayanan == 1 ? 'Rawat Inap' : 'Rawat Jalan'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkAction::make('no_rawat')
@@ -172,12 +179,12 @@ class RegistrasiKontrol extends Page implements HasForms, HasTable
         $text .= "🩺 <b>Dokter</b> : {$dokter}" . "<br /><br />";
 
         $text .= "Apakah sudah melakukan pendaftaran untuk kontrol melalui <b>aplikasi Mobile JKN</b> ?" . "<br />";
-        $text .= "Mohon konfirmasi Bapak/Ibu 🙏" . "<br /><br />";
+        $text .= "Mohon konfirmasi Bapak/Ibu" . "<br /><br />";
 
         $text .= "Apabila ada kendala saat mendaftar bapak/ibu bisa hubungi kami kembali." . "<br /><br />";
 
-        $text .= "Terima kasih 🙏" . "<br />";
-        $text .= "Sehat dan Bahagia bersama kami! 😊";
+        $text .= "Terima kasih" . "<br />";
+        $text .= "Sehat dan Bahagia bersama kami";
 
         return $text;
     }
