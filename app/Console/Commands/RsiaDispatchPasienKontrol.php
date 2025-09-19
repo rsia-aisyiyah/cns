@@ -43,6 +43,7 @@ class RsiaDispatchPasienKontrol extends Command
         $records = RegPeriksa::with(['dokter', 'poli', 'pasien'])
             ->where('status_bayar', 'Belum Bayar')
             ->whereDate('tgl_registrasi', $targetDate->toDateString())
+            ->where('stts', '!=', 'Batal')
             ->whereHas('jadwal_dokter')
             ->get();
 
@@ -74,11 +75,12 @@ class RsiaDispatchPasienKontrol extends Command
             $msg .= "🏥 *Poliklinik* : {$poli}" . "<br />";
             $msg .= "🩺 *Dokter* : {$dokter}" . "<br /><br />";
 
-            $msg .= "Pastikan untuk hadir tepat waktu dan membawa dokumen yang diperlukan. <b>Jika ada perubahan atau Anda tidak dapat hadir, mohon beri tahu kami secepatnya ke nomor 085640009934.<b>" . "<br /><br />";
+            $msg .= "Pastikan untuk hadir tepat waktu dan membawa dokumen yang diperlukan." . "<br />";
+            $msg .= "👉 Jika ada pertanyaan atau perubahan jadwal, silakan hubungi langsung <b>Nomor Pendaftaran RSIA Aisyiyah Pekajangan di 085640009934</b>." . "<br /><br />";
+            $msg .= "Mohon <b>tidak membalas pesan ini</b>, karena pesan dikirim otomatis." . "<br /><br />";
             $msg .= "Terima kasih, <br />Sehat dan Bahagia bersama kami! 😊" . "<br /><br />";
 
             $msg .= '<b>RSIA AISYIYAH PEKAJANGAN</b>' . '<br /> -----<br />';
-            $msg .= 'Pesan ini dikirim otomatis, pertanyaan dan informasi dapat disampaikan ke nomor 085640009934';
 
             SendWhatsApp::dispatch($msg, $receiver, config('waha.sessions.byu-ferry.name'))
                 ->delay($baseDelay)

@@ -61,7 +61,9 @@ class SendWhatsApp implements ShouldQueue
         $receiverPhoneNumber = "{$refinedPhoneNumber}@c.us";
 
         // Kirim pesan WA
-        $response = \Illuminate\Support\Facades\Http::post("$whatsappBaseApiUrl/api/sendText", [
+       $response = \Illuminate\Support\Facades\Http::withHeaders([
+            'X-Api-Key' => env('WHATSAPP_API_KEY'), // ambil dari .env biar aman
+        ])->post("$whatsappBaseApiUrl/api/sendText", [
             "chatId"                 => $receiverPhoneNumber,
             "text"                   => $this->htmlToWhatsAppText($this->message),
             "session"                => $this->sessionName,
