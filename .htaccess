@@ -1,0 +1,3 @@
+# /var/www/html/cns/.htaccess
+# Order allow,deny
+# Deny from all
