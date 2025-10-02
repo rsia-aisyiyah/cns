@@ -23,7 +23,7 @@ Dengan CNS, developer maupun user bisnis tidak perlu membangun integrasi notifik
   Menggunakan WhatsApp API untuk mengirim pesan ke nomor telepon dengan aman dan cepat.  
 
 - **🗂 Manajemen Notifikasi Terpusat**  
-  Setiap notifikasi dapat dikategorikan, dijadwalkan, dan dikirim sesuai kondisi tertentu (misalnya notifikasi pembayaran, reminder janji temu, dsb.).  
+  Setiap notifikasi dapat dikategorikan, dijadwalkan, dan dikirim sesuai kondisi tertentu (misalnya notifikasi pembayaran, reminder janji temu, dan sebagainya.).  
 
 - **📝 Dukungan Format Pesan**  
   Mendukung **markup sederhana** (seperti **bold**, *italic*, ~strikethrough~) yang otomatis disesuaikan dengan format WhatsApp.  
@@ -32,7 +32,7 @@ Dengan CNS, developer maupun user bisnis tidak perlu membangun integrasi notifik
   Mudah dihubungkan dengan aplikasi eksternal melalui **REST API** atau **webhook**, cocok untuk ERP, HIS, CRM, maupun aplikasi custom.  
 
 - **⏱ Notifikasi Terjadwal & Berulang**  
-  Mendukung pengiriman notifikasi berdasarkan waktu tertentu (reminder harian, mingguan, dsb.).  
+  Mendukung pengiriman notifikasi berdasarkan waktu tertentu (reminder harian, mingguan, dan sebagainya.).  
 
 - **📊 Monitoring & Logging**  
   Setiap pesan tercatat statusnya (queued, sent, delivered, failed) untuk memudahkan pelacakan dan troubleshooting.  
