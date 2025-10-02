@@ -1,24 +1,55 @@
-# Central Notification Service 🔔
+# Central Notification Service 🔔  
 
-**CNS** (Central Notification Service) adalah sistem pengiriman notifikasi terpusat yang memungkinkan aplikasi mengirim pesan notifikasi ke berbagai saluran, seperti WhatsApp, email, atau sistem pesan lainnya, melalui antarmuka yang mudah digunakan.
+**CNS (Central Notification Service)** adalah sistem **pengiriman notifikasi terpusat** yang dirancang untuk memudahkan aplikasi atau sistem lain dalam menyampaikan pesan ke berbagai saluran komunikasi (multi-channel), seperti **WhatsApp, email, SMS, atau platform pesan lainnya**.  
 
-## Fitur Utama ✨
-- **Pengiriman Pesan WhatsApp**: Kirim pesan ke nomor telepon menggunakan WhatsApp API.
-- **Manajemen Notifikasi Terpusat**: Pengelolaan notifikasi dengan kemampuan untuk mengatur pesan berdasarkan berbagai kondisi dan waktu.
-- **Dukungan untuk Format Pesan**: Mendukung HTML yang diubah menjadi format teks (misalnya, **bold**, *italic*, ~strikethrough~) yang dapat dikirimkan melalui WhatsApp.
-- **Integrasi dengan Sistem Pihak Ketiga**: Mudah diintegrasikan dengan aplikasi lainnya melalui API.
+Dengan CNS, developer maupun user bisnis tidak perlu membangun integrasi notifikasi secara terpisah untuk tiap layanan, cukup sekali integrasi lalu semua notifikasi dapat dikelola melalui satu pintu.  
 
-## Teknologi yang Digunakan ⚙️
+---
 
-CNS (Central Notification Service) dibangun menggunakan berbagai teknologi untuk memastikan kinerja yang optimal dan pengembangan yang mudah. Berikut adalah teknologi yang digunakan:
+## 🎯 Manfaat Utama
+- **Satu Pusat Kendali Notifikasi**  
+  Semua notifikasi dari berbagai aplikasi terkumpul di satu layanan, sehingga mudah dipantau dan dikelola.  
+- **Hemat Waktu & Biaya**  
+  Tidak perlu lagi membuat integrasi terpisah untuk WhatsApp, email, dan saluran lain.  
+- **Skalabilitas Tinggi**  
+  Didukung sistem antrian (queue), sehingga pesan dapat diproses secara massal tanpa mengganggu performa aplikasi utama.  
+- **Fleksibel & Mudah Diintegrasikan**  
+  Menyediakan **API sederhana** yang bisa digunakan berbagai aplikasi pihak ketiga.  
 
-- **[Laravel: v10.0+](https://laravel.com/)**
-- **[Livewire: v3.0+](https://laravel-livewire.com/)**
-- **[filamentphp](https://filamentphp.com/)**
-- **[Queue System](https://laravel.com/docs/queues)**
-- **WhatsApp API**
-- **[PHP: 8.1+](https://php.net/)**
+---
 
+## ✨ Fitur Utama
+- **📱 Pengiriman Pesan WhatsApp**  
+  Menggunakan WhatsApp API untuk mengirim pesan ke nomor telepon dengan aman dan cepat.  
+
+- **🗂 Manajemen Notifikasi Terpusat**  
+  Setiap notifikasi dapat dikategorikan, dijadwalkan, dan dikirim sesuai kondisi tertentu (misalnya notifikasi pembayaran, reminder janji temu, dan sebagainya).
+
+- **📝 Dukungan Format Pesan**  
+  Mendukung **markup sederhana** (seperti **bold**, *italic*, ~strikethrough~) yang otomatis disesuaikan dengan format WhatsApp.  
+
+- **🔗 Integrasi dengan Sistem Lain**  
+  Mudah dihubungkan dengan aplikasi eksternal melalui **REST API** atau **webhook**, cocok untuk ERP, HIS, CRM, maupun aplikasi custom.  
+
+- **⏱ Notifikasi Terjadwal & Berulang**  
+  Mendukung pengiriman notifikasi berdasarkan waktu tertentu (reminder harian, mingguan, dan sebagainya).
+
+- **📊 Monitoring & Logging**  
+  Setiap pesan tercatat statusnya (queued, sent, delivered, failed) untuk memudahkan pelacakan dan troubleshooting.  
+
+---
+
+## ⚙️ Teknologi yang Digunakan
+CNS dibangun dengan teknologi modern agar **stabil, aman, dan mudah dikembangkan**:
+
+- **[Laravel 10+](https://laravel.com/)** → Framework backend utama.  
+- **[Livewire 3+](https://laravel-livewire.com/)** → Membuat antarmuka interaktif tanpa perlu banyak JavaScript.  
+- **[FilamentPHP](https://filamentphp.com/)** → Panel admin untuk monitoring notifikasi & manajemen data.  
+- **[Laravel Queue System](https://laravel.com/docs/queues)** → Memastikan pengiriman notifikasi berjalan teratur & scalable.  
+- **WhatsApp API** → Untuk integrasi pesan WhatsApp.  
+- **[PHP 8.1+](https://php.net/)** → Bahasa utama pengembangan.  
+
+---
 
 ## Instalasi 💻
 
