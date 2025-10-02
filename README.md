@@ -32,7 +32,7 @@ Dengan CNS, developer maupun user bisnis tidak perlu membangun integrasi notifik
   Mudah dihubungkan dengan aplikasi eksternal melalui **REST API** atau **webhook**, cocok untuk ERP, HIS, CRM, maupun aplikasi custom.  
 
 - **⏱ Notifikasi Terjadwal & Berulang**  
-  Mendukung pengiriman notifikasi berdasarkan waktu tertentu (reminder harian, mingguan, dan sebagainya.).  
+  Mendukung pengiriman notifikasi berdasarkan waktu tertentu (reminder harian, mingguan, dan sebagainya).
 
 - **📊 Monitoring & Logging**  
   Setiap pesan tercatat statusnya (queued, sent, delivered, failed) untuk memudahkan pelacakan dan troubleshooting.  
